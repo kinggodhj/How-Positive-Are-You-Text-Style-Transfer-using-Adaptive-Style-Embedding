@@ -20,6 +20,10 @@ Run the processing file in each dataset folder.
     
     
 ### Training    
+Run below code for training from scartch
+
+`python main.py`
+
 
 ### Evaluation
 Accuracy, BLEU score, Perplexity are used to evaluate.
