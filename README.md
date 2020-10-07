@@ -3,7 +3,7 @@ How Positive Are You: Text Style Transfer using Adaptive Style Embedding(COLING 
 
 
 
-Preparing Data
+1. Preparing Data
 
 In the data folder, there are "yelp" and "amazon".
 
