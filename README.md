@@ -9,16 +9,11 @@ torch 1.4.0
 numpy 1.18.1
 
 
-## Directory 
---Main Dir ---Data--- yelp
-            |      |_ amazon
-            |     
-            |_Save
-
-
 ### Preparing Data
 In this paper, "Yelp" and "Amazon" dataset are used.
+
 Run the processing file in each dataset folder.
+
 `python processed_data.py`
 
 
