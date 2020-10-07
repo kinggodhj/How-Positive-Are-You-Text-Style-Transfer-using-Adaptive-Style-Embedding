@@ -5,7 +5,6 @@ current_path=$PWD
 export HUMAN_FILE=~/workspace/NMT/transformer/human_yelp
 export SOURCE_FILE=~/workspace/NMT/transformer/yelp/sentiment.test
 export PPL_PATH=~/workspace/NMT/transformer/srilm
-#export BLEU_PATH=~/workspace/NMT/related_work/controllable-text-attribute-transfer/outputs
 export ACC_PATH=~/workspace/NMT/transformer
 
 if [ $# -eq 1 ]
