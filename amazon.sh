@@ -5,7 +5,6 @@ current_path=$PWD
 export HUMAN_FILE=~/workspace/NMT/transformer/amazon/human.txt
 export SOURCE_FILE=~/workspace/NMT/transformer/amazon/sentiment.test
 export PPL_PATH=~/workspace/NMT/transformer/srilm
-#export BLEU_PATH=~/workspace/NMT/related_work/controllable-text-attribute-transfer/outputs
 export ACC_PATH=~/workspace/NMT/transformer
 
 if [ $# -eq 1 ]
