@@ -50,7 +50,7 @@ parser.add_argument('--label_size', type=int, default=1)
 
 parser.add_argument('--gpu', type=int, default=2)
 
-parser.add_argument('--name', type=str, default='pick')
+parser.add_argument('--name', type=str, default='yelp')
 parser.add_argument('--load_model', type=bool)
 parser.add_argument('--load_iter', type=int)
 args = parser.parse_args()
@@ -78,12 +78,10 @@ if __name__ == '__main__':
     dis_optimizer=torch.optim.Adam(dis_model.parameters(), lr=0.0001)
     if args.load_model:
         # Load models' params from checkpoint
-        ae_model.load_state_dict(torch.load(args.current_save_path + '/{}_ae_model_params.pkl'.format(args.load_iter)))
-        dis_model.load_state_dict(torch.load(args.current_save_path + '/{}_dis_model_params.pkl'.format(args.load_iter)))
+        ae_model.load_state_dict(torch.load(args.current_save_path + '/yelp_ae_model_params.pkl'))
+        dis_model.load_state_dict(torch.load(args.current_save_path + '/yelp_dis_model_params.pkl'))
        
-        start=args.load_iter+1 
     else:
-        start=0        
     train_data_loader=non_pair_data_loader(
         batch_size=args.batch_size, id_bos=args.id_bos,
         id_eos=args.id_eos, id_unk=args.id_unk,
@@ -111,14 +109,14 @@ if __name__ == '__main__':
     ]
     eval_data_loader.create_batches(eval_file_list, eval_label_list, if_shuffle=False)
 
-    for epoch in range(start, args.epoch):
+    for epoch in range(args.epoch):
         loss_ae, loss_dis, acc, ae_model, dis_model, ae_optimizer, dis_optimizer=train_pick(ae_model, dis_model, ae_optimizer, dis_optimizer, train_data_loader, epoch, args)
             
         summary.add_scalar('{}/train/Transformer'.format(args.name), loss_ae, epoch)
         summary.add_scalar('{}/train/Discriminator'.format(args.name), loss_dis, epoch)
         summary.add_scalar('{}/train/Acc'.format(args.name), acc, epoch)
             
-        torch.save(ae_model.state_dict(), args.current_save_path + '/{}_ae_model_params.pkl'.format(epoch))
+        torch.save(ae_model.state_dict(), args.current_save_path + '/{}__ae_model_params.pkl'.format(epoch))
         torch.save(dis_model.state_dict(), args.current_save_path + '/{}_dis_model_params.pkl'.format(epoch))
             
         loss_v_ae, loss_v_dis, acc=val_pick(ae_model, dis_model, eval_data_loader, epoch, args)
