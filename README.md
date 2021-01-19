@@ -1,5 +1,6 @@
 # How Positive Are You: Text Style Transfer using Adaptive Style Embedding 
 How Positive Are You: Text Style Transfer using Adaptive Style Embedding(COLING 2020)
+<https://www.aclweb.org/anthology/2020.coling-main.191.pdf>
 
 ## Dependencies 
 python 3.7.3
