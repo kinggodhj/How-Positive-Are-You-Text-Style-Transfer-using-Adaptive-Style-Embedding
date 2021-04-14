@@ -12,18 +12,18 @@ Whole model architecture consists of two module
 
 1) Auto-encoder based on Transformer
 
-Transformer is trained by reconstruction loss (Cross-entropy)
+      Transformer is trained by reconstruction loss (Cross-entropy)
 
-Especially, decoder's input is (encoder's latent vector + style embedding). 
+      Especially, decoder's input is (encoder's latent vector + style embedding). 
 
-Possible combination: (positive sentence-positive embedding, negative sentence-negative embedding)
+      Possible combination: (positive sentence-positive embedding, negative sentence-negative embedding)
 
 
 2) Style embedding module
 
-Style embedding module is trained by classification loss
+      Style embedding module is trained by classification loss
 
-Style embedding vector is trained by similarities with encoder's latent vector
+      Style embedding vector is trained by similarities with encoder's latent vector
 
 --------------------------------
 
@@ -62,9 +62,14 @@ Transforemr embedding, latent, model size: 256
 
 Style embedding size: 256
 ```
+
 --------------------------------
 
-### 3. Evaluation
+### 3. Style transfer
+
+--------------------------------
+
+### 4. Evaluation
 Accuracy, BLEU score, Perplexity are used to evaluate.
 
 For calcualte perpexity, download ["SRILM"](http://www.speech.sri.com/projects/srilm/download)
@@ -86,5 +91,5 @@ For yelp, run the below code.
 
 --------------------------------
 
-### 4. Style transfer
+
 
