@@ -10,6 +10,8 @@ torch 1.4.0
 
 numpy 1.18.1
 
+nltk
+
 --------------------------------
 
 ### 1. Preparing Data
@@ -32,10 +34,6 @@ Especially, decoder's input is (encoder's latent vector + style embedding).
 
 Possible combination: (positive sentence-positive embedding, negative sentence-negative embedding)
 
-Positive style embedding is added to input positive sentence.
-
-Also, negative style embedding is added to input negative sentence.
-
 
 2) Style embedding module
 
@@ -43,12 +41,9 @@ Style embedding module is trained by classification loss
 
 Style embedding vector is trained by similarities with encoder's latent vector
 
-Positive sentences are compressed to latent vector that is containing positive information.
-
-So style embedding can be trained to represent each style information using similarities. 
 
 
-settings)
+### settings)
 
 Transformer # layers: 2-layers 
 
