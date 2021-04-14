@@ -55,13 +55,14 @@ Run below code for training from scartch
 `python main.py`
 
 #### Default settings)
-
+```
 Transformer # layers: 2-layers 
 
 Transforemr embedding, latent, model size: 256
 
 Style embedding size: 256
-
+```
+--------------------------------
 
 ### 3. Evaluation
 Accuracy, BLEU score, Perplexity are used to evaluate.
@@ -83,6 +84,7 @@ For yelp, run the below code.
 
 `./eval.sh`
 
+--------------------------------
 
 ### 4. Style transfer
 
