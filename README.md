@@ -15,10 +15,13 @@ numpy 1.18.1
 ### 1. Preparing Data
 In this paper, "Yelp" and "Amazon" dataset are used.
 
+NLTK is used for tokenization.
+
 Run the processing file in each dataset folder.
 
 `python processed_data.py`
-    
+
+
     
 ### 2. Training    
 Run below code for training from scartch
