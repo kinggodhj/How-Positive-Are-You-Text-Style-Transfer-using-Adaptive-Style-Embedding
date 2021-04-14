@@ -3,6 +3,30 @@ How Positive Are You: Text Style Transfer using Adaptive Style Embedding(COLING 
 
 <https://www.aclweb.org/anthology/2020.coling-main.191.pdf>
 
+
+--------------------------------
+
+
+Model description    
+Whole model architecture consists of two module
+
+1) Auto-encoder based on Transformer
+
+Transformer is trained by reconstruction loss (Cross-entropy)
+
+Especially, decoder's input is (encoder's latent vector + style embedding). 
+
+Possible combination: (positive sentence-positive embedding, negative sentence-negative embedding)
+
+
+2) Style embedding module
+
+Style embedding module is trained by classification loss
+
+Style embedding vector is trained by similarities with encoder's latent vector
+
+--------------------------------
+
 ## Dependencies 
 python 3.7.3
 
@@ -23,27 +47,14 @@ Run the processing file in each dataset folder.
 
 `python processed_data.py`
 
-### 2. Model description    
-Whole model architecture consists of two module
+--------------------------------
 
-1) Auto-encoder based on Transformer
+### 2. Training    
+Run below code for training from scartch
 
-Transformer is trained by reconstruction loss (Cross-entropy)
+`python main.py`
 
-Especially, decoder's input is (encoder's latent vector + style embedding). 
-
-Possible combination: (positive sentence-positive embedding, negative sentence-negative embedding)
-
-
-2) Style embedding module
-
-Style embedding module is trained by classification loss
-
-Style embedding vector is trained by similarities with encoder's latent vector
-
-
-
-### settings)
+#### Default settings)
 
 Transformer # layers: 2-layers 
 
@@ -51,13 +62,8 @@ Transforemr embedding, latent, model size: 256
 
 Style embedding size: 256
 
-### 3. Training    
-Run below code for training from scartch
 
-`python main.py`
-
-
-### 4. Evaluation
+### 3. Evaluation
 Accuracy, BLEU score, Perplexity are used to evaluate.
 
 For calcualte perpexity, download ["SRILM"](http://www.speech.sri.com/projects/srilm/download)
@@ -78,5 +84,5 @@ For yelp, run the below code.
 `./eval.sh`
 
 
-### 5. Style transfer
+### 4. Style transfer
 
