@@ -11,6 +11,64 @@ def calc_bleu(reference, hypothesis):
     weights = (0.25, 0.25, 0.25, 0.25)
     return nltk.translate.bleu_score.sentence_bleu(reference, hypothesis, weights,
                                                    smoothing_function=SmoothingFunction().method1)
+
+
+def pad_sequence(tensor_output, args):
+    padded=torch.zeros(tensor_output.size(0), tensor_output.size(1))
+    for i in range(tensor_output.size(0)):
+        for j in range(tensor_output.size(1)):
+            if not tensor_output[i][j].item() == 3: #eos token
+                padded[i][j]=tensor_output[i][j]
+            else:
+                padded[i][j]=tensor_output[i][j]
+                padded[i][j+1:].fill_(0) #padding
+    return get_cuda(padded, args.gpu)
+
+
+def style_input(size, size2, style, args):
+    tensor_style=torch.zeros(size, size2)
+    for i in range(style.size(0)):
+        if style[i].item() == 1:
+            tensor_style[i]=1
+
+    tensor_style=get_cuda(tensor_style, args.gpu).long()
+    return tensor_style
+
+def get_bt_input(input, args):
+#    modified_src=torch.zeros(input.size(0), input.size(1)-1)
+    tensor_tgt=torch.zeros(input.size(0), input.size(1))
+    tensor_src=torch.zeros(input.size(0), input.size(1)-1)
+#    modified_tgt_y=torch.zeros(input.size(0), input.size(1)-1)
+    for b in range(input.size(0)):
+        tensor_tgt[b][0]=args.id_bos
+        for l in range(tensor_src.size(1)):
+#            modified_src[b][l]=input[b][l]
+            tensor_tgt[b][l+1]=input[b][l]
+            tensor_src[b][l]=input[b][l]
+#            modified_tgt_y[b][l]=input[b][l]
+#    modified_src=modified_src.long()
+    tensor_tgt=tensor_tgt.long()
+    tensor_src=tensor_src.long()
+#    modified_tgt_y=modified_tgt_y.long()
+            
+#    modified_src=get_cuda(modified_src, args.gpu)
+    tensor_tgt=get_cuda(tensor_tgt, args.gpu)
+    tensor_src=get_cuda(tensor_src, args.gpu)
+#    modified_tgt_y=get_cuda(modified_tgt_y, args.gpu)
+    tensor_tgt_y=to_var(input.clone(), args.gpu).long()
+    
+    src_mask=(tensor_src != 0).unsqueeze(-2)
+    tgt_mask=(tensor_tgt != 0).unsqueeze(-2)
+    tgt_mask=tgt_mask & get_cuda(Variable(subsequent_mask(tensor_tgt.size(-1)).to('cuda:%s'%args.gpu).type_as(tgt_mask.data)), args.gpu)
+    
+    src_mask=get_cuda(src_mask, args.gpu)
+    tgt_mask=get_cuda(tgt_mask, args.gpu) 
+    
+    ntokens = (tensor_tgt_y != 0).data.sum().float()
+
+
+    return tensor_src, tensor_tgt, tensor_tgt_y, src_mask, tgt_mask, ntokens.item()
+
        
 def load_human_answer(data_path):
     ans = []
@@ -192,6 +250,19 @@ class non_pair_data_loader():
             tgt_mask = self.make_std_mask(tgt, 0)
             ntokens = (tgt_y != 0).data.sum().float()
 
+            # For debug
+            # print("item_sentences", item_sentences)
+            # print("item_labels", item_labels)
+            # print("src", src)
+            # print("tgt", tgt)
+            # print("tgt_y", tgt_y)
+            # print("batch_encoder_length", batch_encoder_length)
+            # print("batch_decoder_length", batch_decoder_length)
+            # print("src_mask", src_mask)
+            # print("tgt_mask", tgt_mask)
+            # print("ntokens", ntokens.float())
+            # input("--------------")
+
             self.sentences_batches.append(item_sentences)
             self.labels_batches.append(get_cuda(torch.tensor(item_labels, dtype=torch.float), self.gpu))
             self.src_batches.append(src)
@@ -237,7 +308,10 @@ class non_pair_data_loader():
 
 
 if __name__ == '__main__':
-   class Batch:
+
+
+
+    class Batch:
         "Object for holding a batch of data with mask during training."
 
         def __init__(self, src, trg=None, pad=0):
