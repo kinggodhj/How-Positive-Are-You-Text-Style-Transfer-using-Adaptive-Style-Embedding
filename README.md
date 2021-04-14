@@ -67,6 +67,15 @@ Style embedding size: 256
 
 ### 3. Style transfer
 
+Run the <U>beam_generation.py</U> file.
+
+Beam search is used 
+
+--weight : Hyper-parameter, it controls the style strength (0<=weight, if weight==0 then reconstruction is performed)
+```
+python beam_generation.py --weight 9.0
+```
+
 --------------------------------
 
 ### 4. Evaluation
