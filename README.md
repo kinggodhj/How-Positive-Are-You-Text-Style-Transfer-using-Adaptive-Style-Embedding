@@ -76,9 +76,8 @@ Beam search is used
 python beam_generation.py --weight 9.0
 ```
 
-![image](https://user-images.githubusercontent.com/37800546/114689317-8ccb2480-9d50-11eb-904a-9a1eef72155a.png)
+![image](https://user-images.githubusercontent.com/37800546/114689651-e29fcc80-9d50-11eb-8b3b-15eb3c376f63.png)
 
-![image](https://user-images.githubusercontent.com/37800546/114688164-6bb60400-9d4f-11eb-9096-3f95a52ab598.png)
 
 --------------------------------
 
