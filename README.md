@@ -21,15 +21,48 @@ Run the processing file in each dataset folder.
 
 `python processed_data.py`
 
+### 2. Model description    
+Whole model architecture consists of two module
 
-    
-### 2. Training    
+1) Auto-encoder based on Transformer
+
+Transformer is trained by reconstruction loss (Cross-entropy)
+
+Especially, decoder's input is (encoder's latent vector + style embedding). 
+
+Possible combination: (positive sentence-positive embedding, negative sentence-negative embedding)
+
+Positive style embedding is added to input positive sentence.
+
+Also, negative style embedding is added to input negative sentence.
+
+
+2) Style embedding module
+
+Style embedding module is trained by classification loss
+
+Style embedding vector is trained by similarities with encoder's latent vector
+
+Positive sentences are compressed to latent vector that is containing positive information.
+
+So style embedding can be trained to represent each style information using similarities. 
+
+
+settings)
+
+Transformer # layers: 2-layers 
+
+Transforemr embedding, latent, model size: 256
+
+Style embedding size: 256
+
+### 3. Training    
 Run below code for training from scartch
 
 `python main.py`
 
 
-### 3. Evaluation
+### 4. Evaluation
 Accuracy, BLEU score, Perplexity are used to evaluate.
 
 For calcualte perpexity, download ["SRILM"](http://www.speech.sri.com/projects/srilm/download)
@@ -48,3 +81,7 @@ After that modify the path in the "eval.sh" file.
 For yelp, run the below code. 
 
 `./eval.sh`
+
+
+### 5. Style transfer
+
