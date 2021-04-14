@@ -90,14 +90,15 @@ For calcualte perpexity, download ["SRILM"](http://www.speech.sri.com/projects/s
 
 After that modify the path in the "eval.sh" file.
 
-`HUMAN_FILE=~/path of human_yelp file`
+```
+HUMAN_FILE=~/path of human_yelp file`
 
-`SOURCE_FILE=~/path of sentiment.test file`
+SOURCE_FILE=~/path of sentiment.test file`
 
-`PPL_PATH=~/path of srilm `
+PPL_PATH=~/path of srilm `
 
-`ACC_PATH=~/path of acc.py file`
-
+ACC_PATH=~/path of acc.py file`
+```
 
 For yelp, run the below code. 
 
