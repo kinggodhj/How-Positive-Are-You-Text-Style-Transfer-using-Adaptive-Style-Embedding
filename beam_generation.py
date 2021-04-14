@@ -9,7 +9,6 @@ import torch
 from torch import optim
 
 from data import get_cuda, id2text_sentence, non_pair_data_loader, to_var
-from getScore import getAccuracy, getBleu
 from model import make_model
 from setup import add_output, preparation 
 
@@ -30,7 +29,7 @@ parser.add_argument('--id_eos', type=int, default=3, help='')
 ######################################################################################
 parser.add_argument('--task', type=str, default='yelp', help='Specify datasets.')
 parser.add_argument('--word_to_id_file', type=str, default='', help='')
-parser.add_argument('--data_path', type=str, default='../yelp/processed_files/', help='')
+parser.add_argument('--data_path', type=str, default='./data/yelp/processed_files/', help='')
 parser.add_argument('--name', type=str, default='pick_style')
 parser.add_argument('--beam_size', type=int, default=10)
 
@@ -39,7 +38,6 @@ parser.add_argument('--beam_size', type=int, default=10)
 ######################################################################################
 parser.add_argument('--word_dict_max_num', type=int, default=5, help='')
 parser.add_argument('--batch_size', type=int, default=128, help='')
-parser.add_argument('--epoch', type=int, default=200)
 parser.add_argument('--max_sequence_length', type=int, default=60)
 parser.add_argument('--num_layers_AE', type=int, default=2)
 parser.add_argument('--transformer_model_size', type=int, default=256)
@@ -51,7 +49,6 @@ parser.add_argument('--embedding_dropout', type=float, default=0.5)
 parser.add_argument('--learning_rate', type=float, default=0.001)
 parser.add_argument('--label_size', type=int, default=1)
 
-parser.add_argument('--iter', type=str, default=108)
 parser.add_argument('--gpu', type=int, default=1)
 parser.add_argument('--weight', type=float, default=9)
 parser.add_argument('--mode', type=str, default='add')
@@ -64,7 +61,7 @@ device=torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
 #  End of hyper parameters
 ######################################################################################
 
-def generation(ae_model, epoch, args):
+def generation(ae_model, args):
     eval_data_loader=non_pair_data_loader(
         batch_size=1, id_bos=args.id_bos,
         id_eos=args.id_eos, id_unk=args.id_unk,
@@ -100,7 +97,7 @@ def generation(ae_model, epoch, args):
         w=args.weight
         out_1=ae_model.beam_decode(latent+sign*w*(own_emb+trans_emb), args.beam_size, args.max_sequence_length, args.id_bos)
         style_1=id2text_sentence(out_1[0], args.id_to_word)
-        add_output(style_1, './generation/{}/{}_beam{}_{}.txt'.format(args.name, epoch, args.beam_size, args.weight))
+        add_output(style_1, './generation/{}/beam{}_{}.txt'.format(args.name, args.beam_size, args.weight))
 
         sent=sent_dic[tensor_labels.item()]
         trans=sent_dic[1-tensor_labels.item()]
@@ -122,10 +119,8 @@ if __name__ == '__main__':
                                    gpu=args.gpu,
                                    d_ff=args.transformer_ff_size), args.gpu)
 
-    iters=args.iter.split(',')
-    for idx, i in enumerate(iters):
-        ae_model.load_state_dict(torch.load(args.current_save_path + '/{}_ae_model_params.pkl'.format(i), map_location=device))
-        generation(ae_model, i, args)
+    ae_model.load_state_dict(torch.load('./save/yelp_ae_model_params.pkl', map_location=device))
+    generation(ae_model, args)
 
     print("Done!")
 
