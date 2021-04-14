@@ -79,6 +79,9 @@ python beam_generation.py --weight 9.0
 ![image](https://user-images.githubusercontent.com/37800546/114689651-e29fcc80-9d50-11eb-8b3b-15eb3c376f63.png)
 
 
+![image](https://user-images.githubusercontent.com/37800546/114689882-209cf080-9d51-11eb-9dad-23097ca8c590.png)
+
+
 --------------------------------
 
 ### 4. Evaluation
