@@ -76,6 +76,8 @@ Beam search is used
 python beam_generation.py --weight 9.0
 ```
 
+![image](https://user-images.githubusercontent.com/37800546/114688164-6bb60400-9d4f-11eb-9096-3f95a52ab598.png)
+
 --------------------------------
 
 ### 4. Evaluation
@@ -102,11 +104,13 @@ For yelp, run the below code.
 
 ### Other settings
 
-To improve the PPL scores, I've tried a lot of options.
+To improve the PPL scores, I've tried a lot of options. 
 
-Below two options are meaningful
+Below two options are meaningful (Performance comparison table below).
 
-1) Using the pre-trained word embeddings from GPT-2
+Using these options improves the PPL score, but slightly degrades style transfer performance (See the example table below).
+
+1) Using the pre-trained word embeddings from GPT-2 (called as PE)
 
    Fluency is reflected by PPL score.
    
@@ -114,7 +118,9 @@ Below two options are meaningful
    
    Therefore, to inhance the fluency, use the pre-trained word embeddings.
    
-   i've used ![image](https://user-images.githubusercontent.com/37800546/114685418-cac64980-9d4c-11eb-8894-47c26b929980.png) [huggingface](https://huggingface.co/transformers/)
+   i've used 
+   
+   ![image](https://user-images.githubusercontent.com/37800546/114685418-cac64980-9d4c-11eb-8894-47c26b929980.png) [huggingface](https://huggingface.co/transformers/)
    
    GPT2Model setting is added in <U>model.py</U> file
    ```
@@ -130,7 +136,7 @@ Below two options are meaningful
    
    Also, PPL score is emproved.
    
-2) Pre-Layer normalization & Layer normalization to style embedding module 
+2) Pre-Layer normalization & Layer normalization to style embedding module (called as LN)
    
    [Pre-layer normalization](https://openreview.net/forum?id=B1x8anVFPr) boosts the speed of training
    
@@ -145,6 +151,8 @@ Below two options are meaningful
    
    Style embedding using layer normalization 
    
+   If you tried layer normalization on style embedding, the weight parameter's scale is changed. 
+   
    StyleEmbeddings class is modified in <U>model.py</U> file
    ```
    def __init__(self, n_style, d_style):
@@ -155,3 +163,9 @@ Below two options are meaningful
    def forward(self, x):
        return self.norm(self.lut(x))
    ```
+
+      ![image](https://user-images.githubusercontent.com/37800546/114688540-bf285200-9d4f-11eb-910b-188410094292.png)
+      
+      ![image](https://user-images.githubusercontent.com/37800546/114688599-cea79b00-9d4f-11eb-93a2-d9d80da9beb3.png)
+
+      ![image](https://user-images.githubusercontent.com/37800546/114688655-de26e400-9d4f-11eb-919a-3b6bfea3b1af.png)
