@@ -10,10 +10,9 @@ torch 1.4.0
 
 numpy 1.18.1
 
+--------------------------------
 
-    
-
-### Preparing Data
+### 1. Preparing Data
 In this paper, "Yelp" and "Amazon" dataset are used.
 
 Run the processing file in each dataset folder.
@@ -21,13 +20,13 @@ Run the processing file in each dataset folder.
 `python processed_data.py`
     
     
-### Training    
+### 2. Training    
 Run below code for training from scartch
 
 `python main.py`
 
 
-### Evaluation
+### 3. Evaluation
 Accuracy, BLEU score, Perplexity are used to evaluate.
 
 For calcualte perpexity, download ["SRILM"](http://www.speech.sri.com/projects/srilm/download)
