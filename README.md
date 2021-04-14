@@ -136,13 +136,13 @@ Below two options are meaningful
    
    Style embedding using layer normalization 
    
-  StyleEmbeddings class is modified in <U>model.py</U> file
-  ```
-  def __init__(self, n_style, d_style):
-      super(StyleEmbeddings, self).__init__()
-      self.lut=nn.Embedding(n_style, d_style)
-      self.norm=LayerNorm(d_style)
+   StyleEmbeddings class is modified in <U>model.py</U> file
+   ```
+   def __init__(self, n_style, d_style):
+       super(StyleEmbeddings, self).__init__()
+       self.lut=nn.Embedding(n_style, d_style)
+       self.norm=LayerNorm(d_style)
   
-  def forward(self, x):
-      return self.norm(self.lut(x))
-  ```
+   def forward(self, x):
+       return self.norm(self.lut(x))
+   ```
