@@ -65,7 +65,7 @@ summary=SummaryWriter('./runs/{}'.format(args.name))
 if __name__ == '__main__':
     preparation(args)
 
-    ae_model = get_cuda(make_model(d_vocab=args.vocab_size,
+    transformer = get_cuda(make_model(d_vocab=args.vocab_size,
                                    N=args.num_layers_AE,
                                    d_model=args.transformer_model_size,
                                    latent_size=args.latent_size,
@@ -73,12 +73,12 @@ if __name__ == '__main__':
                                    d_ff=args.transformer_ff_size), args.gpu)
 
     dis_model=get_cuda(Classifier(1, args),args.gpu)
-    ae_optimizer = NoamOpt(ae_model.src_embed[0].d_model, 1, 2000,
-                           torch.optim.Adam(ae_model.parameters(), lr=0, betas=(0.9, 0.98), eps=1e-9))
+    lm_optimizer = NoamOpt(transformer.src_embed[0].d_model, 1, 2000,
+                           torch.optim.Adam(transformer.parameters(), lr=0, betas=(0.9, 0.98), eps=1e-9))
     dis_optimizer=torch.optim.Adam(dis_model.parameters(), lr=0.0001)
     if args.load_model:
         # Load models' params from checkpoint
-        ae_model.load_state_dict(torch.load(args.current_save_path + '/yelp_ae_model_params.pkl'))
+        transformer.load_state_dict(torch.load(args.current_save_path + '/yelp_lm_model_params.pkl'))
         dis_model.load_state_dict(torch.load(args.current_save_path + '/yelp_dis_model_params.pkl'))
        
     else:
@@ -110,16 +110,16 @@ if __name__ == '__main__':
     eval_data_loader.create_batches(eval_file_list, eval_label_list, if_shuffle=False)
 
     for epoch in range(args.epoch):
-        loss_ae, loss_dis, acc, ae_model, dis_model, ae_optimizer, dis_optimizer=train_pick(ae_model, dis_model, ae_optimizer, dis_optimizer, train_data_loader, epoch, args)
+        loss_ae, loss_dis, acc, transformer, dis_model, lm_optimizer, dis_optimizer=train_pick(transformer, dis_model, lm_optimizer, dis_optimizer, train_data_loader, epoch, args)
             
         summary.add_scalar('{}/train/Transformer'.format(args.name), loss_ae, epoch)
         summary.add_scalar('{}/train/Discriminator'.format(args.name), loss_dis, epoch)
         summary.add_scalar('{}/train/Acc'.format(args.name), acc, epoch)
             
-        torch.save(ae_model.state_dict(), args.current_save_path + '/{}__ae_model_params.pkl'.format(epoch))
+        torch.save(transformer.state_dict(), args.current_save_path + '/{}__lm_model_params.pkl'.format(epoch))
         torch.save(dis_model.state_dict(), args.current_save_path + '/{}_dis_model_params.pkl'.format(epoch))
             
-        loss_v_ae, loss_v_dis, acc=val_pick(ae_model, dis_model, eval_data_loader, epoch, args)
+        loss_v_ae, loss_v_dis, acc=val_pick(transformer, dis_model, eval_data_loader, epoch, args)
 
         summary.add_scalar('{}/val/Transformer'.format(args.name), loss_v_ae, epoch)
         summary.add_scalar('{}/val/Discriminator'.format(args.name), loss_v_dis, epoch)
