@@ -30,8 +30,9 @@ parser.add_argument('--id_eos', type=int, default=3, help='')
 parser.add_argument('--task', type=str, default='yelp', help='Specify datasets.')
 parser.add_argument('--word_to_id_file', type=str, default='', help='')
 parser.add_argument('--data_path', type=str, default='./data/yelp/processed_files/', help='')
-parser.add_argument('--name', type=str, default='pick_style')
+parser.add_argument('--name', type=str, default='He')
 parser.add_argument('--beam_size', type=int, default=10)
+parser.add_argument('--epoch', type=int, default=108)
 
 ######################################################################################
 #  Model parameters
@@ -95,7 +96,7 @@ def generation(ae_model, args):
         trans_emb=style.clone()[torch.arange(style.size(0)), (1-tensor_labels).long().item()] 
         own_emb=style.clone()[torch.arange(style.size(0)), tensor_labels.long().item()] 
         w=args.weight
-        out_1=ae_model.beam_decode(latent+sign*w*(own_emb+trans_emb), args.beam_size, args.max_sequence_length, args.id_bos)
+        out_1=ae_model.beam_decode(latent+t_sign*w*(own_emb+trans_emb), args.beam_size, args.max_sequence_length, args.id_bos)
         style_1=id2text_sentence(out_1[0], args.id_to_word)
         add_output(style_1, './generation/{}/beam{}_{}.txt'.format(args.name, args.beam_size, args.weight))
 
