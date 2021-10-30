@@ -82,48 +82,48 @@ if __name__ == '__main__':
         dis_model.load_state_dict(torch.load(args.current_save_path + '/yelp_dis_model_params.pkl'))
        
     else:
-    train_data_loader=non_pair_data_loader(
-        batch_size=args.batch_size, id_bos=args.id_bos,
-        id_eos=args.id_eos, id_unk=args.id_unk,
-        max_sequence_length=args.max_sequence_length, vocab_size=args.vocab_size,
-        gpu=args.gpu
-    )
+        train_data_loader=non_pair_data_loader(
+            batch_size=args.batch_size, id_bos=args.id_bos,
+            id_eos=args.id_eos, id_unk=args.id_unk,
+            max_sequence_length=args.max_sequence_length, vocab_size=args.vocab_size,
+            gpu=args.gpu
+        )
 
-    train_data_loader.create_batches(args.train_file_list, args.train_label_list, if_shuffle=True)
+        train_data_loader.create_batches(args.train_file_list, args.train_label_list, if_shuffle=True)
 
-    eval_data_loader=non_pair_data_loader(
-        batch_size=args.batch_size, id_bos=args.id_bos,
-        id_eos=args.id_eos, id_unk=args.id_unk,
-        max_sequence_length=args.max_sequence_length, vocab_size=args.vocab_size,
-        gpu=args.gpu
-    )
+        eval_data_loader=non_pair_data_loader(
+            batch_size=args.batch_size, id_bos=args.id_bos,
+            id_eos=args.id_eos, id_unk=args.id_unk,
+            max_sequence_length=args.max_sequence_length, vocab_size=args.vocab_size,
+            gpu=args.gpu
+        )
 
-    eval_file_list=[
-        args.data_path+'sentiment.dev.0',
-        args.data_path+'sentiment.dev.1',
-    ]
+        eval_file_list=[
+            args.data_path+'sentiment.dev.0',
+            args.data_path+'sentiment.dev.1',
+        ]
 
-    eval_label_list=[
-        [0],
-        [1],
-    ]
-    eval_data_loader.create_batches(eval_file_list, eval_label_list, if_shuffle=False)
+        eval_label_list=[
+            [0],
+            [1],
+        ]
+        eval_data_loader.create_batches(eval_file_list, eval_label_list, if_shuffle=False)
 
-    for epoch in range(args.epoch):
-        loss_ae, loss_dis, acc, transformer, dis_model, lm_optimizer, dis_optimizer=train_pick(transformer, dis_model, lm_optimizer, dis_optimizer, train_data_loader, epoch, args)
-            
-        summary.add_scalar('{}/train/Transformer'.format(args.name), loss_ae, epoch)
-        summary.add_scalar('{}/train/Discriminator'.format(args.name), loss_dis, epoch)
-        summary.add_scalar('{}/train/Acc'.format(args.name), acc, epoch)
-            
-        torch.save(transformer.state_dict(), args.current_save_path + '/{}__lm_model_params.pkl'.format(epoch))
-        torch.save(dis_model.state_dict(), args.current_save_path + '/{}_dis_model_params.pkl'.format(epoch))
-            
-        loss_v_ae, loss_v_dis, acc=val_pick(transformer, dis_model, eval_data_loader, epoch, args)
+        for epoch in range(args.epoch):
+            loss_ae, loss_dis, acc, transformer, dis_model, lm_optimizer, dis_optimizer=train_pick(transformer, dis_model, lm_optimizer, dis_optimizer, train_data_loader, epoch, args)
 
-        summary.add_scalar('{}/val/Transformer'.format(args.name), loss_v_ae, epoch)
-        summary.add_scalar('{}/val/Discriminator'.format(args.name), loss_v_dis, epoch)
-        summary.add_scalar('{}/val/Acc'.format(args.name), acc, epoch)
-    
-    print("Done!")
+            summary.add_scalar('{}/train/Transformer'.format(args.name), loss_ae, epoch)
+            summary.add_scalar('{}/train/Discriminator'.format(args.name), loss_dis, epoch)
+            summary.add_scalar('{}/train/Acc'.format(args.name), acc, epoch)
+
+            torch.save(transformer.state_dict(), args.current_save_path + '/{}__lm_model_params.pkl'.format(epoch))
+            torch.save(dis_model.state_dict(), args.current_save_path + '/{}_dis_model_params.pkl'.format(epoch))
+
+            loss_v_ae, loss_v_dis, acc=val_pick(transformer, dis_model, eval_data_loader, epoch, args)
+
+            summary.add_scalar('{}/val/Transformer'.format(args.name), loss_v_ae, epoch)
+            summary.add_scalar('{}/val/Discriminator'.format(args.name), loss_v_dis, epoch)
+            summary.add_scalar('{}/val/Acc'.format(args.name), acc, epoch)
+
+        print("Done!")
 
